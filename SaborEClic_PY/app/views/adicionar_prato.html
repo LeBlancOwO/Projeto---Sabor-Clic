@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+
+Adicionar Prato
+<br><br>
+
+<form>
+
+    <label>Nome do prato</label>
+    <br>
+    <input id="nome_prato-form">
+    <br><br>
+
+    <label>Descrição do prato</label>
+    <br>
+    <input id="descricao_prato-form">
+    <br><br>
+
+    <label>Valor do prato</label>
+    <br>
+    <input id="valor_prato-form">
+    <br><br>
+
+    <label>Imagem do prato</label>
+    <br>
+    <input id="img_prato-form">
+    <br><br>
+
+</form>
+
+<button type="submit">Criar</button>
+
+{% endblock %}

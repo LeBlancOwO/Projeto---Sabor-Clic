@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+
+Login
+<br><br>
+
+<form>
+
+    <label>Usuário</label>
+    <br>
+    <input id="usuario-form">
+    <br><br>
+
+    <label>Senha</label>
+    <br>
+    <input id="senha-form">
+    <br><br>
+
+</form>
+
+<button type="submit">Entrar</button>
+<br><br>
+
+<a href="{{url_for('login.renderizar_cadastro')}}">Não tem um conta? Cadastre-se</a>
+
+{% endblock %}
