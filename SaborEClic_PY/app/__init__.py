@@ -18,4 +18,7 @@ def create_app():
     from app.controllers.usuario_controller import usuario_bp
     app.register_blueprint(usuario_bp)
 
+    from app.controllers.servicos_controller import servicos_bp
+    app.register_blueprint(servicos_bp)
+
     return app
