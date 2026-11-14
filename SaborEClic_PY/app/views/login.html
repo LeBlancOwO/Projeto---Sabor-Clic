@@ -2,26 +2,41 @@
 
 {% block conteudo %}
 
-Login
-<br><br>
+<h2>Login</h2>
+<h3>Faça seu login:</h3>
+<br>
 
-<form>
+<form action="/login/logar" method="POST">
 
-    <label>Usuário</label>
+    <label>Email</label>
     <br>
-    <input id="usuario-form">
+    <input name="email" type="email" placeholder="Ex:teste@gmail.com" required>
+    <br><br>
+
+    <label>CPF</label>
+    <br>
+    <input name="cpf" type="text" placeholder="Ex: 000.000.000-00" required>
     <br><br>
 
     <label>Senha</label>
     <br>
-    <input id="senha-form">
+    <input name="senha" type="password" placeholder="Mínimo de 8 caracteres" required>
+    <br><br>
+
+    <label>Nível de  acesso</label>
+    <br>
+    <select name="nivel_acesso">
+        <option>Administrador</option>
+        <option>Cozinheiro</option>
+        <option>Cliente</option>
+    </select>
+    <br><br>
+
+    <button type="submit">Entrar</button>
     <br><br>
 
 </form>
 
-<button type="submit">Entrar</button>
-<br><br>
-
-<a href="{{url_for('login.renderizar_cadastro')}}">Não tem um conta? Cadastre-se</a>
+<a href="{{url_for('cadastro.renderizar_cadastro')}}">Não tem uma conta? Cadastre-se</a>
 
 {% endblock %}

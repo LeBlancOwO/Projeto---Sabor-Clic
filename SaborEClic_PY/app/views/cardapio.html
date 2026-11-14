@@ -2,8 +2,34 @@
 
 {% block conteudo %}
 
-Cardapio
+<h2>Cardapio</h2>
 
-<a href="{{url_for('cardapio.renderizar_adicionar_prato')}}">Adicionar Prato</a>
+<a href="{{url_for('cardapio.novo_prato')}}">Adicionar Prato</a>
+
+<table>
+
+    <tr></tr>
+
+        <th>Id</th>
+        <th>Nome</th>
+        <th>Ingredientes</th>
+        <th>Valor unitário</th>
+
+    </tr>
+
+   {% for prato in pratos %}
+
+    <tr>
+
+        <td>{{ prato[0] }}</td>
+        <td>{{ prato[1] }}</td>
+        <td>{{ prato[2] }}</td>
+        <td>{{ prato[3] }}</td>
+
+        </tr>
+
+    {% endfor %}
+
+</table>
 
 {% endblock %}

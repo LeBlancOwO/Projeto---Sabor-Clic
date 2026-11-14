@@ -5,30 +5,30 @@
 Adicionar Prato
 <br><br>
 
-<form>
+<form action="/cardapio/adicionar" method = "POST">
 
     <label>Nome do prato</label>
     <br>
-    <input id="nome_prato-form">
+    <input name="nome_prato" type="text" required>
     <br><br>
 
     <label>Descrição do prato</label>
     <br>
-    <input id="descricao_prato-form">
+    <input name="ingredientes" type="text" required>
     <br><br>
 
     <label>Valor do prato</label>
     <br>
-    <input id="valor_prato-form">
+    <input name="valor_unitario" type="text" required>
     <br><br>
 
     <label>Imagem do prato</label>
     <br>
-    <input id="img_prato-form">
+    <input name="img_prato">
     <br><br>
 
-</form>
+    <button type="submit">Adicionar prato</button>
 
-<button type="submit">Criar</button>
+</form>
 
 {% endblock %}
