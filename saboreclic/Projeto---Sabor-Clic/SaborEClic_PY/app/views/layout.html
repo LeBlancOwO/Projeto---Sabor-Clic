@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+
+<section class="hero" aria-label="Destaques">
+    <div class="hero-track">
+
+        <article class="slide slide-doces">
+            <h2>Doces</h2>
+            <p>para todas as ocasiões!</p>
+            <a class="btn" href="{{ url_for('cardapio.renderizar_cardapio') }}">Clique aqui</a>
+        </article>
+
+        <article class="slide slide-bolos">
+            <h2>Bolos</h2>
+            <p>que adoçam momentos!</p>
+            <a class="btn" href="{{ url_for('cardapio.renderizar_cardapio') }}">Clique aqui</a>
+        </article>
+
+        <article class="slide slide-buffet">
+            <h2>Buffet</h2>
+            <p>para celebrar com sabor!</p>
+            <a class="btn" href="{{ url_for('servicos.renderizar_servicos') }}">Clique aqui</a>
+        </article>
+
+    </div>
+    <button class="arrow prev" aria-label="Banner anterior">‹</button>
+    <button class="arrow next" aria-label="Próximo banner">›</button>
+    <div class="dots"><button aria-label="Banner 1"></button><button aria-label="Banner 2"></button><button aria-label="Banner 3"></button></div>
+</section>
+
+<section class="benefits">
+    <div><span class="ico">
+
+    </span>AGENDE SEU PEDIDO</div>
+    <div><span class="ico">
+
+    </span>ENTREGA PARA TODA SÃO PAULO</div>
+    <div><span class="ico">
+
+    </span>10% OFF NO PRIMEIRO PEDIDO</div>
+    <div><span class="ico">
+        
+    </span>RECEBA NA SUA CASA EM ATÉ 48H</div>
+</section>
+
+<section class="categorias">
+    <h2 class="section-title">Nossas Categorias</h2>
+    <div class="cat-grid">
+        <a class="cat" href="{{ url_for('cardapio.renderizar_cardapio') }}"><div class="img cat-doces"></div><span>Doces</span></a>
+        <a class="cat" href="{{ url_for('cardapio.renderizar_cardapio') }}"><div class="img cat-bolos"></div><span>Bolos</span></a>
+        <a class="cat" href="{{ url_for('cardapio.renderizar_cardapio') }}"><div class="img cat-sobremesas"></div><span>Sobremesas</span></a>
+        <a class="cat" href="{{ url_for('cardapio.renderizar_cardapio') }}"><div class="img cat-salgadinhos"></div><span>Salgadinhos</span></a>
+        <a class="cat" href="{{ url_for('servicos.renderizar_servicos') }}"><div class="img cat-buffet"></div><span>Buffet</span></a>
+    </div>
+</section>
+
+<section class="sobre">
+    <div>
+        <h2>Sobre a Doce Celebração</h2>
+        <p>Transformamos momentos especiais em lembranças ainda mais doces! Na Doce Celebração, cada detalhe é preparado com carinho, dedicação e muito amor para tornar suas comemorações inesquecíveis.</p>
+        <a class="btn btn-vinho" href="{{ url_for('cardapio.renderizar_cardapio') }}">Ver cardápio</a>
+    </div>
+    <div class="sobre-img" role="img" aria-label="Doces artesanais"></div>
+</section>
+
+{% endblock %}
