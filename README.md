@@ -194,6 +194,7 @@ Confira se você está na pasta `SaborEClic_PY` antes de rodar `python run.py`. 
 - [< Gabriela>](<https://github.com/EuGranola>)
 - [< Gabrielle>](https://github.com/LeBlancOwO)
 - [< Grazielly>]()
+- [<Matheus>]()
 
 ---
 
