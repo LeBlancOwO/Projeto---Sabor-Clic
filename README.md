@@ -191,9 +191,9 @@ Confira se você está na pasta `SaborEClic_PY` antes de rodar `python run.py`. 
 ## 👩‍💻 Autores
 
 <!-- Coloque os nomes da equipe -->
-- [< seu Gabriela>](<https://github.com/EuGranola>)
-- [<seu Gabrielle>]()
-- [<seu Grazielly>]()
+- [< Gabriela>](<https://github.com/EuGranola>)
+- [< Gabrielle>](https://github.com/LeBlancOwO)
+- [< Grazielly>]()
 
 ---
 
