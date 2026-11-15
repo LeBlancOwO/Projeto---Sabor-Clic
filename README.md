@@ -191,17 +191,19 @@ Confira se você está na pasta `SaborEClic_PY` antes de rodar `python run.py`. 
 ## 👩‍💻 Autores
 
 <!-- Coloque os nomes da equipe -->
-- [<Gabriela>](https://github.com/<seu-usuario>)
+- [< seu Gabriela>](<https://github.com/EuGranola>)
+- [<seu Gabrielle>]()
+- [<seu Grazielly>]()
 
 ---
 
 <div align="center">
-Feito com 💗 e muito açúcar
+Feito com amor e açúcar
 </div>>
 cd Projeto---Sabor-Clic
 ```
 
-> 💡 Também dá para baixar pelo botão verde **Code › Download ZIP** e extrair a pasta.
+> Também dá para baixar pelo botão verde **Code › Download ZIP** e extrair a pasta.
 
 ### 2. Criar o ambiente virtual
 
@@ -268,13 +270,3 @@ Recarregue com `Ctrl + Shift + R` para limpar o cache do navegador e confira se 
 Confira se você está na pasta `SaborEClic_PY` antes de rodar `python run.py`. No Linux, maiúsculas e minúsculas importam.
 </details>
 
-## 👩‍💻 Autores
-
-<!-- Coloque os nomes da equipe -->
-- [<Seu Nome>](https://github.com/<seu-usuario>)
-
----
-
-<div align="center">
-Feito com 💗 e muito açúcar
-</div>
