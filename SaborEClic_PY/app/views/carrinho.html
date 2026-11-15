@@ -2,9 +2,28 @@
 
 {% block conteudo %}
 
-<div class="page-card">
-    <h2>Pedidos</h2>
-    <p>Seu carrinho está vazio.</p>
-</div>
+    <h2>Seus pedidos</h2>
+
+    {% for item in pedidos %}
+
+        <p>{{ item[1] }}</p>
+
+        <p>Quantidade: {{ item[4] }}</p>
+
+        <p>Valor Unitário: R$ {{ item[3] }}</p>
+
+        <p>Subtotal:
+        R$ {{ item[3]|float * item[4]|int }}</p>
+
+        <a href="/carrinho/excluir/{{ item[0] }}">Excluir</a>
+
+
+        <hr>
+
+    {% endfor %}
+
+    <h1>Total do pedido: R$ {{ total }}</h1>
+
+    <button>Fechar pedido</button>
 
 {% endblock %}

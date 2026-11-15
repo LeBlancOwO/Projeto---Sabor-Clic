@@ -2,31 +2,41 @@
 
 {% block conteudo %}
 
-<div class="page-card">
-    <h2>Login</h2>
-    <h3>Faça seu login:</h3>
+<h2>Login</h2>
+<h3>Faça seu login:</h3>
+<br>
 
-    <form action="/login/logar" method="POST">
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" placeholder="Ex:teste@gmail.com" required>
+<form action="/login/logar" method="POST">
 
-        <label for="cpf">CPF</label>
-        <input id="cpf" name="cpf" type="text" placeholder="Ex: 000.000.000-00" required>
+    <label>Email</label>
+    <br>
+    <input name="email" type="email" placeholder="Ex:teste@gmail.com" required>
+    <br><br>
 
-        <label for="senha">Senha</label>
-        <input id="senha" name="senha" type="password" placeholder="Mínimo de 8 caracteres" required>
+    <label>CPF</label>
+    <br>
+    <input name="cpf" type="text" placeholder="Ex: 000.000.000-00" required>
+    <br><br>
 
-        <label for="nivel">Nível de acesso</label>
-        <select id="nivel" name="nivel_acesso">
-            <option>Administrador</option>
-            <option>Cozinheiro</option>
-            <option>Cliente</option>
-        </select>
+    <label>Senha</label>
+    <br>
+    <input name="senha" type="password" placeholder="Mínimo de 8 caracteres" required>
+    <br><br>
 
-        <button class="btn btn-vinho" type="submit">Entrar</button>
-    </form>
+    <label>Nível de  acesso</label>
+    <br>
+    <select name="nivel_acesso">
+        <option>Administrador</option>
+        <option>Cozinheiro</option>
+        <option>Cliente</option>
+    </select>
+    <br><br>
 
-    <p class="link-extra"><a href="{{url_for('cadastro.renderizar_cadastro')}}">Não tem uma conta? Cadastre-se</a></p>
-</div>
+    <button type="submit">Entrar</button>
+    <br><br>
+
+</form>
+
+<a href="{{url_for('cadastro.renderizar_cadastro')}}">Não tem uma conta? Cadastre-se</a>
 
 {% endblock %}

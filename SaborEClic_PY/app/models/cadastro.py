@@ -16,7 +16,7 @@ class Cadastro:
 
             cursor.execute(""" 
                 CREATE TABLE IF NOT EXISTS Cadastro(
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id_usuario INTEGER PRIMARY KEY AUTOINCREMENT,
                 nome VARCHAR(100) NOT NULL,
                 email VARCHAR(100) NOT NULL,
                 cpf VARCHAR(11) NOT NULL UNIQUE,

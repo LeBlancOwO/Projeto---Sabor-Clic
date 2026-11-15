@@ -2,24 +2,33 @@
 
 {% block conteudo %}
 
-<div class="page-card">
-    <h2>Adicionar Prato</h2>
+Adicionar Prato
+<br><br>
 
-    <form action="/cardapio/adicionar" method="POST">
-        <label for="nome_prato">Nome do prato</label>
-        <input id="nome_prato" name="nome_prato" type="text" required>
+<form action="/cardapio/adicionar" method = "POST">
 
-        <label for="ingredientes">Descrição do prato</label>
-        <input id="ingredientes" name="ingredientes" type="text" required>
+    <label>Nome do prato</label>
+    <br>
+    <input name="nome_prato" type="text" required>
+    <br><br>
 
-        <label for="valor_unitario">Valor do prato</label>
-        <input id="valor_unitario" name="valor_unitario" type="text" required>
+    <label>Descrição do prato</label>
+    <br>
+    <input name="ingredientes" type="text" required>
+    <br><br>
 
-        <label for="img_prato">Imagem do prato</label>
-        <input id="img_prato" name="img_prato">
+    <label>Valor do prato</label>
+    <br>
+    <input name="valor_unitario" type="text" required>
+    <br><br>
 
-        <button class="btn btn-vinho" type="submit">Adicionar prato</button>
-    </form>
-</div>
+    <label>Imagem do prato</label>
+    <br>
+    <input name="img_prato">
+    <br><br>
+
+    <button type="submit">Adicionar prato</button>
+
+</form>
 
 {% endblock %}

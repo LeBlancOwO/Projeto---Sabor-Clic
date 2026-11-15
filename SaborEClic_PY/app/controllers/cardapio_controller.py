@@ -17,6 +17,7 @@ def adicionar_prato():
     nome_prato = request.form["nome_prato"]
     ingredientes = request.form["ingredientes"]
     valor_unitario = request.form["valor_unitario"]
+    valor_unitario = valor_unitario.replace(",", ".")
 
     cardapio = Cardapio(
         nome_prato,
@@ -26,4 +27,4 @@ def adicionar_prato():
 
     cardapio.Salvar()
 
-    return redirect ("/cardapio/")
+    return redirect ("/pedidos/")

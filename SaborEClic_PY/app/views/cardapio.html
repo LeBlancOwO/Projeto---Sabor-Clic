@@ -2,32 +2,50 @@
 
 {% block conteudo %}
 
-<div class="page-wide">
-    <h2>Cardápio</h2>
-    <a class="btn btn-vinho" href="{{url_for('cardapio.novo_prato')}}">Adicionar Prato</a>
+<h2>Cardapio</h2>
 
-    <div class="table-wrap">
-        <table>
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Nome</th>
-                    <th>Ingredientes</th>
-                    <th>Valor unitário</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for prato in pratos %}
-                <tr>
-                    <td>{{ prato[0] }}</td>
-                    <td>{{ prato[1] }}</td>
-                    <td>{{ prato[2] }}</td>
-                    <td>{{ prato[3] }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
+<a href="{{url_for('cardapio.novo_prato')}}">Adicionar Prato</a>
+
+<table>
+
+    <tr>
+
+        <th>Id</th>
+        <th>Nome</th>
+        <th>Ingredientes</th>
+        <th>Valor unitário</th>
+        <th>Quantidade</th>
+        <th>Açõoes</th>
+
+    </tr>
+
+   {% for prato in pratos %}
+
+    <tr>
+
+        <td>{{ prato[0] }}</td>
+        <td>{{ prato[1] }}</td>
+        <td>{{ prato[2] }}</td>
+        <td>{{ prato[3] }}</td>
+
+    </tr>
+
+    <td>
+
+        <form action="/carrinho/adicionar" method = "POST">
+
+            <input type="hidden" name="id_prato" value="{{prato[0]}}">
+
+            <input type="number" name="quantidade" value="1" min="1" required>
+
+            <button type="submit">Adicionar ao carrinho</button>
+
+        </form>
+
+    </td>
+
+    {% endfor %}
+
+</table>
 
 {% endblock %}

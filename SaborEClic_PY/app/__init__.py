@@ -1,6 +1,7 @@
 from flask import Flask
 from app.models.cadastro import Cadastro
 from app.models.cardapio import Cardapio
+from app.models.carrinho import Carrinho
 
 def create_app():
     app = Flask(__name__, template_folder="views", static_folder="static") 
@@ -20,13 +21,8 @@ def create_app():
     from app.controllers.homepage_controller import homepage_bp
     app.register_blueprint(homepage_bp)
 
-    from app.controllers.usuario_controller import usuario_bp
-    app.register_blueprint(usuario_bp)
-
-    from app.controllers.servicos_controller import servicos_bp
-    app.register_blueprint(servicos_bp)
-
     Cadastro.Criar_tabela()
     Cardapio.Criar_tabela()
+    Carrinho.Criar_tabela()
 
     return app
