@@ -2,43 +2,32 @@
 
 {% block conteudo %}
 
-<h2>Cadastro</h2>
-<h3>Faça seu cadastro</h3>
-<br><br>
+<div class="page-card">
+    <h2>Cadastro</h2>
+    <h3>Faça seu cadastro</h3>
 
-<form action="/cadastro/cadastrar" method="POST">
+    <form action="/cadastro/cadastrar" method="POST">
+        <label for="nome">Nome</label>
+        <input id="nome" name="nome" type="text" placeholder="Ex: Maria Silva de Andrade" required>
 
-    <label>Nome</label>
-    <br>
-    <input name="nome" type="text" placeholder="Ex: Maria Silva de Andrade" required>
-    <br><br>
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" placeholder="Ex: aleatorio@gmail.com" required>
 
-    <label>Email</label>
-    <br>
-    <input name="email" type="email" placeholder="Ex: aleatorio@gmail.com" required>
-    <br><br>
+        <label for="cpf">CPF</label>
+        <input id="cpf" name="cpf" type="text" placeholder="Ex: 000.000.000-00" required>
 
-    <label>CPF</label>
-    <br>
-    <input name="cpf" type="text" placeholder="Ex: 000.000.000-00" required>
-    <br><br>
+        <label for="senha">Senha</label>
+        <input id="senha" name="senha" type="password" placeholder="Mínimo de 8 caracteres" required>
 
-    <label>Senha</label>
-    <br>
-    <input name="senha" type="password" placeholder="Mínimo de 8 caracteres" required>
-    <br><br>
+        <label for="nivel">Nível de acesso</label>
+        <select id="nivel" name="nivel_acesso">
+            <option>Administrador</option>
+            <option>Cozinheiro</option>
+            <option>Cliente</option>
+        </select>
 
-    <label>Nível de  acesso</label>
-    <br>
-    <select name="nivel_acesso">
-        <option>Administrador</option>
-        <option>Cozinheiro</option>
-        <option>Cliente</option>
-    </select>
-    <br><br>
-
-    <button type="submit">Criar</button>
-
-</form>
+        <button class="btn btn-vinho" type="submit">Criar</button>
+    </form>
+</div>
 
 {% endblock %}
