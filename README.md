@@ -12,7 +12,7 @@ Site de uma doceria com cardápio, cadastro, login, pedidos e contratação de s
 ### 1. Baixar o projeto
 
 ```bash
-git clone <LINK-DO-SEU-REPOSITORIO>
+git clone <https://github.com/LeBlancOwO/Projeto---Sabor-Clic/tree/main>
 cd Projeto---Sabor-Clic
 ```
 
