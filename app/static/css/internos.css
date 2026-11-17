@@ -1,13 +1,18 @@
+/* ==========================================================================
+   5. INTERNOS.CSS — Painéis Admin/Cozinha, Tabelas, Calendário e Modal
+   ========================================================================== */
+
 .page-wide {
     background: var(--branco);
     margin: 2.5rem auto;
     padding: 2rem;
     border-radius: 24px;
     box-shadow: var(--sombra);
-    width: min(94%, 960px);
+    width: min(94%, 900px);
 }
-.page-wide h2 { font-size: 2rem; margin-bottom: .6rem; }
+.page-wide h2 { font-size: 2rem; margin-bottom: .3rem; }
 
+/* ===== Tabelas ===== */
 .table-wrap { overflow-x: auto; margin-top: 1.5rem; }
 table { width: 100%; border-collapse: collapse; }
 th { background: var(--rosa); color: #fff; text-align: left; padding: .8rem 1rem; }
@@ -23,9 +28,71 @@ body.dark-mode tbody tr:nth-child(even) { background: #2A1D20; }
 .badge-preparo { background: #FFD1A3; color: #8A3B00; }
 .badge-pronto { background: #C8F7C5; color: #1E6B1B; }
 
+/* ===== Seletor de Mês Estilizado (Reserva) ===== */
+.filtro-mes-box {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    background: var(--creme);
+    padding: 1rem 1.4rem;
+    border-radius: 18px;
+    border: 2px solid var(--rosa-claro);
+    margin: 1.5rem 0;
+}
+body.dark-mode .filtro-mes-box { background: #2A1D20; border-color: #4D3237; }
+.filtro-mes-box label { font-weight: 600; color: var(--vinho); margin: 0; }
+.input-mes-estilizado {
+    padding: .65rem 1.1rem;
+    border: 2px solid var(--rosa);
+    border-radius: 14px;
+    font: 500 1rem 'Poppins', sans-serif;
+    color: var(--marrom);
+    background: var(--branco);
+    cursor: pointer;
+    outline: none;
+    transition: .2s;
+}
+.input-mes-estilizado:focus { border-color: var(--vinho); box-shadow: 0 0 0 3px rgba(158, 56, 73, .15); }
+body.dark-mode .input-mes-estilizado { background: #1E1A1B; color: #fff; color-scheme: dark; }
+
 /* ===== Calendário de Reserva ===== */
 .calendario-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-top: 1.5rem; }
 .dia-box { padding: 1rem .5rem; text-align: center; border-radius: 12px; font-weight: 500; cursor: pointer; border: 2px solid transparent; transition: transform .2s; }
 .dia-livre { background: #E3F9E5; color: #1F6E24; border-color: #A3E4A8; }
 .dia-livre:hover { transform: scale(1.05); }
 .dia-ocupado { background: #FADBD8; color: #922B21; cursor: not-allowed; opacity: .75; }
+.dia-passado { background: rgba(121, 80, 68, .12); color: rgba(121, 80, 68, .45); cursor: not-allowed; text-decoration: line-through; }
+body.dark-mode .dia-passado { background: rgba(255, 255, 255, .06); color: rgba(255, 255, 255, .3); }
+
+/* ===== Modal Bonito de Reserva ===== */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9990;
+    background: rgba(0, 0, 0, .55);
+    backdrop-filter: blur(3px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+.modal-overlay.aberto { display: flex; animation: fadeInModal .25s ease; }
+.modal-box {
+    background: var(--branco);
+    color: var(--marrom);
+    width: min(94%, 440px);
+    padding: 2rem;
+    border-radius: 24px;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, .3);
+    position: relative;
+}
+.modal-box h3 { font-size: 1.7rem; margin-bottom: .3rem; }
+.modal-fechar { position: absolute; top: 16px; right: 20px; background: none; border: 0; font-size: 1.6rem; color: var(--marrom); cursor: pointer; }
+.modal-acoes { display: flex; gap: 10px; margin-top: 1.5rem; }
+.modal-acoes .btn { flex: 1; margin-top: 0; }
+
+@keyframes fadeInModal {
+    from { opacity: 0; transform: scale(.94); }
+    to { opacity: 1; transform: scale(1); }
+}

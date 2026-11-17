@@ -15,6 +15,15 @@ function mostrarNotificacao(titulo, mensagem, tipo = "sucesso") {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("aviso") === "carrinho") {
+        mostrarNotificacao(
+            "Quase lá! 🛒",
+            "Faça login na sua conta para adicionar o item ao carrinho.",
+            "sucesso"
+        );
+    }
+
     // 1. Login
     const formLogin = document.getElementById("form-login");
     if (formLogin) {
@@ -31,16 +40,33 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
                 const data = await res.json();
                 if (data.sucesso) {
+                    const pendenteRaw = sessionStorage.getItem("item_pendente_carrinho");
+
+                    if (pendenteRaw) {
+                        const pendente = JSON.parse(pendenteRaw);
+                        let carrinho = JSON.parse(localStorage.getItem("carrinho") || "[]");
+                        const existente = carrinho.find(i => i.id === pendente.id);
+
+                        if (existente) existente.quantidade += 1;
+                        else carrinho.push(pendente);
+
+                        localStorage.setItem("carrinho", JSON.stringify(carrinho));
+                        sessionStorage.removeItem("item_pendente_carrinho");
+                        if (typeof atualizarBadgeCarrinho === "function") atualizarBadgeCarrinho();
+                    }
+
                     mostrarNotificacao(
                         `Bem-vindo(a), ${data.usuario.nome.split(" ")[0]}!`,
-                        "Login realizado com sucesso. Redirecionando...",
+                        pendenteRaw ? "Item adicionado! Abrindo seu carrinho..." : "Login realizado com sucesso. Redirecionando...",
                         "sucesso"
                     );
+
                     setTimeout(() => {
-                        if (data.usuario.nivel_acesso === "administrador") window.location.href = "/admin";
+                        if (pendenteRaw) window.location.href = "/carrinho";
+                        else if (data.usuario.nivel_acesso === "administrador") window.location.href = "/admin";
                         else if (data.usuario.nivel_acesso === "cozinheiro") window.location.href = "/cozinha";
                         else window.location.href = "/cardapio";
-                    }, 1200);
+                    }, 1000);
                 } else {
                     mostrarNotificacao("Ops! Algo deu errado", data.mensagem, "erro");
                 }

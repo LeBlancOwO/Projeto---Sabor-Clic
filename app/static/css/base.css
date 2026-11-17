@@ -1,14 +1,19 @@
+/* ==========================================================================
+   1. BASE.CSS — Variáveis, Reset, Botões, Header, Switch, Toast e Rodapé
+   ========================================================================== */
+
 :root {
-    --rosa-claro: #F8DADD;
-    --rosa: #E98C9C;
-    --rosa-antigo: #C96D7D;
-    --marrom: #795044;
-    --vinho: #A83F50;
-    --branco: #FFFFFF;
-    --creme: #FFF8F6;
-    --sombra: 0 6px 20px rgba(121, 80, 68, .15);
+    --rosa-claro: #F3D1D6;
+    --rosa: #E28293;
+    --rosa-antigo: #C26474;
+    --marrom: #6B4439;
+    --vinho: #9E3849;
+    --branco: #FBF6F2;          /* Cards e cabeçalho em creme bem suave */
+    --creme: #EFE3DA;           /* Fundo bege aconchegante da página */
+    --sombra: 0 6px 20px rgba(107, 68, 57, .14);
 }
 
+/* ===== Variáveis do Modo Escuro ===== */
 body.dark-mode {
     --branco: #1E1A1B;
     --creme: #141112;
@@ -19,41 +24,79 @@ body.dark-mode {
 
 * { box-sizing: border-box; margin: 0; }
 html { scroll-behavior: smooth; }
-body { font-family: 'Poppins', sans-serif; color: var(--marrom); background: var(--creme); overflow-x: hidden; line-height: 1.6; transition: background .3s, color .3s; }
+body {
+    font-family: 'Poppins', sans-serif;
+    color: var(--marrom);
+    background: var(--creme);
+    overflow-x: hidden;
+    line-height: 1.6;
+    transition: background .3s, color .3s;
+}
 img { max-width: 100%; display: block; }
 a { color: var(--vinho); text-decoration: none; }
 h1, h2, h3 { font-family: 'Playfair Display', serif; color: var(--vinho); line-height: 1.2; }
+:focus-visible { outline: 3px solid var(--rosa); outline-offset: 2px; }
 
 /* ===== Botões ===== */
-.btn { display: inline-block; background: var(--rosa-claro); color: var(--vinho); padding: .6rem 1.8rem; border: 0; border-radius: 30px; font: 500 1rem 'Poppins', sans-serif; cursor: pointer; margin-top: 1rem; transition: .25s; }
+.btn {
+    display: inline-block;
+    background: var(--rosa-claro);
+    color: var(--vinho);
+    padding: .6rem 1.8rem;
+    border: 0;
+    border-radius: 30px;
+    font: 500 1rem 'Poppins', sans-serif;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: .25s;
+}
 .btn:hover { background: var(--vinho); color: #fff; transform: translateY(-2px); box-shadow: var(--sombra); }
 .btn-vinho { background: var(--vinho); color: #fff; }
 .btn-vinho:hover { background: var(--rosa-antigo); }
 
 /* ===== Cabeçalho ===== */
-.site-header { position: sticky; top: 0; z-index: 20; background: var(--branco); display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; padding: .3rem 5%; box-shadow: 0 2px 10px rgba(0, 0, 0, .06); }
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--branco);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: .5rem 5%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .06);
+}
 .logo { width: 130px; height: 90px; overflow: hidden; flex: none; }
 .logo img { width: 130px; height: 90px; object-fit: contain; }
-.nav { display: flex; align-items: center; gap: 1.8rem; font-size: .95rem; }
-.nav a { padding: .3rem 0; border-bottom: 2px solid transparent; transition: .2s; }
-.nav a:hover { border-color: var(--rosa); }
-.header-actions { display: flex; align-items: center; gap: 1.2rem; }
-.icon-btn { position: relative; background: none; border: 0; font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; }
-#cart-count { position: absolute; top: -6px; right: -10px; background: var(--vinho); color: #fff; font: 600 .65rem 'Poppins'; border-radius: 50%; min-width: 18px; height: 18px; display: grid; place-items: center; }
 
-/* ===== Switch Modo Claro / Escuro (Caixa com bola no meio) ===== */
-.theme-switch {
-    position: relative;
-    display: inline-block;
-    width: 52px;
-    height: 26px;
-    cursor: pointer;
+.nav { display: flex; align-items: center; gap: 2.4rem; font-size: 1.08rem; font-weight: 500; }
+.nav a { padding: .5rem .8rem; border-radius: 12px; border-bottom: 2px solid transparent; transition: .2s; }
+.nav a:hover { border-color: var(--rosa); background: var(--rosa-claro); }
+
+.header-actions { display: flex; align-items: center; gap: 1.4rem; }
+.icon-btn { position: relative; background: none; border: 0; font-size: 1.65rem; cursor: pointer; display: flex; align-items: center; }
+#cart-count {
+    position: absolute;
+    top: -6px;
+    right: -10px;
+    background: var(--vinho);
+    color: #fff;
+    font: 600 .65rem 'Poppins';
+    border-radius: 50%;
+    min-width: 18px;
+    height: 18px;
+    display: grid;
+    place-items: center;
 }
-.theme-switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
+.search-bar { flex-basis: 100%; padding: .4rem 0 .8rem; }
+.search-bar input { width: 100%; padding: .7rem 1.2rem; border: 2px solid var(--rosa-claro); border-radius: 30px; font: inherit; color: var(--marrom); }
+.menu-toggle { display: none; background: none; border: 0; font-size: 1.8rem; color: var(--vinho); cursor: pointer; }
+
+/* ===== Switch Modo Claro/Escuro ===== */
+.theme-switch { position: relative; display: inline-block; width: 52px; height: 26px; cursor: pointer; }
+.theme-switch input { opacity: 0; width: 0; height: 0; }
 .theme-slider {
     position: absolute;
     inset: 0;
@@ -76,16 +119,62 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; color: var(--vinho); line-h
     border-radius: 50%;
     transition: transform .3s;
 }
-.theme-switch input:checked + .theme-slider {
-    background-color: var(--vinho);
-    border-color: var(--rosa-antigo);
+.theme-switch input:checked + .theme-slider { background-color: var(--vinho); border-color: var(--rosa-antigo); }
+.theme-switch input:checked + .theme-slider::before { content: "🌙"; transform: translateX(26px); }
+
+/* ===== Notificação Estilizada (Toast) ===== */
+.toast-aviso {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 9999;
+    min-width: 300px;
+    max-width: 400px;
+    padding: 1.1rem 1.4rem;
+    border-radius: 18px;
+    background: var(--branco);
+    color: var(--marrom);
+    border-left: 6px solid var(--vinho);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, .2);
+    font-family: 'Poppins', sans-serif;
+    animation: entrarToast .35s ease forwards;
 }
-.theme-switch input:checked + .theme-slider::before {
-    content: "🌙";
-    transform: translateX(26px);
+.toast-aviso.sucesso { border-left-color: #2E8B57; }
+.toast-aviso.erro { border-left-color: #C0392B; }
+.toast-aviso strong { display: block; font-size: 1.05rem; margin-bottom: .25rem; color: var(--vinho); }
+.toast-aviso.sucesso strong { color: #2E8B57; }
+
+@keyframes entrarToast {
+    from { opacity: 0; transform: translateX(40px); }
+    to { opacity: 1; transform: translateX(0); }
 }
 
 /* ===== Rodapé ===== */
-.site-footer { background: var(--marrom); color: var(--rosa-claro); padding: 2.5rem 5% 1.5rem; margin-top: 3rem; }
-body.dark-mode .site-footer { background: #0D0B0C; }
-.copy { text-align: center; font-size: .85rem; opacity: .85; }
+.site-footer { background: var(--marrom); color: #F8E8EA; padding: 3rem 5% 1.8rem; margin-top: 3rem; }
+body.dark-mode .site-footer { background: #120E0F; color: #E6D5D8; border-top: 1px solid #3A2529; }
+.footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 2.2rem; }
+.site-footer h3 { color: #FFFFFF; margin-bottom: .8rem; font-size: 1.25rem; }
+.site-footer p { margin-bottom: .4rem; font-size: .95rem; }
+.site-footer a { display: block; color: #F8DADD; margin-bottom: .35rem; font-size: .95rem; transition: .2s; }
+.site-footer a:hover { color: #FFFFFF; transform: translateX(3px); }
+.copy {
+    text-align: center;
+    margin-top: 2.5rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid rgba(255, 255, 255, .18);
+    font-size: 1rem;
+    font-weight: 500;
+    color: #FFFFFF;
+    opacity: .95;
+}
+body.dark-mode .copy { color: #F8DADD; border-top-color: rgba(248, 218, 221, .2); }
+
+/* ===== Responsivo Global ===== */
+@media (max-width: 800px) {
+    .menu-toggle { display: block; }
+    .nav { display: none; order: 5; flex-basis: 100%; flex-direction: column; gap: .5rem; padding: .5rem 0 1rem; }
+    .nav.open { display: flex; }
+}
+@media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; scroll-behavior: auto !important; }
+}

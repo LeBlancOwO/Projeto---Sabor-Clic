@@ -178,7 +178,11 @@ async function carregarEstoqueCozinha() {
                 ${lista.map(e => `
                 <tr>
                     <td><strong>${e.insumo}</strong></td>
-                    <td>${e.quantidade}</td>
+                    <td>
+                        <input type="number" min="0" step="0.1" value="${e.quantidade}"
+                            style="width:85px;padding:.35rem;border-radius:8px;"
+                            onchange="atualizarQtdInsumoCozinha(${e.id}, this.value)">
+                    </td>
                     <td>${e.unidade}</td>
                     <td>
                         <button class="btn" style="margin:0;padding:.35rem .8rem;background:#FADBD8;color:#922B21;" onclick="removerInsumoCozinha(${e.id})">Remover</button>
@@ -188,6 +192,18 @@ async function carregarEstoqueCozinha() {
         </table>` : "<p>Nenhum insumo cadastrado ainda.</p>";
     } catch {
         el.innerHTML = "<p>Nenhum insumo cadastrado ainda.</p>";
+    }
+}
+
+async function atualizarQtdInsumoCozinha(id, qtd) {
+    const res = await fetch(`/api/cozinha/estoque/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ quantidade: qtd })
+    });
+    const data = await res.json();
+    if (data.sucesso) {
+        toastCozinha("Insumo Atualizado", data.mensagem);
     }
 }
 

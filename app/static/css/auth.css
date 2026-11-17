@@ -1,10 +1,14 @@
+/* ==========================================================================
+   3. AUTH.CSS — Cartões de Login/Cadastro e Inputs de Formulário
+   ========================================================================== */
+
 .page-card {
     background: var(--branco);
     margin: 2.5rem auto;
     padding: 2rem;
     border-radius: 24px;
     box-shadow: var(--sombra);
-    width: min(92%, 460px);
+    width: min(92%, 480px);
 }
 .page-card h2 { font-size: 2rem; margin-bottom: .3rem; }
 .page-card h3 { font: 400 1rem 'Poppins'; color: var(--marrom); margin-bottom: 1rem; }

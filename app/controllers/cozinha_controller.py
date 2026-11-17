@@ -25,6 +25,16 @@ def salvar_estoque():
     Log.registrar(u["nome"], u["nivel_acesso"], f"Adicionou insumo: {dados['insumo']} ({dados['quantidade']} {dados['unidade']})")
     return jsonify({"sucesso": True, "mensagem": "Insumo salvo no estoque!"})
 
+@cozinha_bp.route("/estoque/<int:item_id>", methods=["PUT"])
+def atualizar_estoque(item_id):
+    if not is_equipe():
+        return jsonify({"sucesso": False}), 403
+    dados = request.get_json()
+    Estoque.atualizar_quantidade(item_id, dados.get("quantidade", 0))
+    u = session.get("usuario")
+    Log.registrar(u["nome"], u["nivel_acesso"], f"Atualizou quantidade do insumo #{item_id} para {dados.get('quantidade')}")
+    return jsonify({"sucesso": True, "mensagem": "Quantidade do insumo atualizada!"})
+
 @cozinha_bp.route("/estoque/<int:item_id>", methods=["DELETE"])
 def remover_estoque(item_id):
     if not is_equipe():

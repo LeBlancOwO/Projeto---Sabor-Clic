@@ -7,10 +7,19 @@
 
     <input type="search" id="filtro-cardapio" placeholder="🔍 Buscar por nome, ingrediente ou categoria..." style="width:100%; padding:.8rem 1.2rem; border-radius:16px; border:2px solid var(--rosa-claro); margin-top:1rem; font:inherit;">
 
-    <div id="grid-cardapio" class="cardapio-grid"></div>
+    <div id="grid-cardapio" class="cardapio-grid" style="display: block;">
+        <div class="empty-state">
+            <div class="empty-icon-circle">🧁</div>
+            <h3>Ainda não temos produtos no cardápio</h3>
+            <p>Em breve teremos deliciosos doces, bolos e salgados disponíveis por aqui!</p>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
+<script>
+    const USUARIO_LOGADO = {{ 'true' if session.get('usuario') else 'false' }};
+</script>
 <script src="{{ url_for('static', filename='js/cardapio.js') }}"></script>
 {% endblock %}
