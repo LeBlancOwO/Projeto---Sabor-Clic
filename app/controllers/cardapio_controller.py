@@ -24,13 +24,33 @@ def adicionar():
     if not pode_gerenciar_produtos(usuario):
         return jsonify({"sucesso": False, "mensagem": "Acesso negado."}), 403
 
-    nome = request.form.get("nome", "").strip()
-    ingredientes = request.form.get("ingredientes", "").strip()
-    categoria = request.form.get("categoria", "Doces").strip()
-    valor = request.form.get("valor", 0)
-    quantidade = request.form.get("quantidade", 0)
-    foto_url = request.form.get("foto_url", "").strip()
-    arquivo = request.files.get("foto_arquivo")
+    # Lê os dados tanto se vierem por JSON quanto por FormData (multipart)
+    if request.is_json:
+        dados = request.get_json() or {}
+        nome = str(dados.get("nome", "")).strip()
+        ingredientes = str(dados.get("ingredientes", "")).strip()
+        categoria = str(dados.get("categoria", "Doces")).strip()
+        valor = dados.get("valor", 0)
+        quantidade = dados.get("quantidade", 0)
+        foto_url = str(dados.get("foto_url", "")).strip()
+        arquivo = None
+    else:
+        nome = request.form.get("nome", "").strip()
+        ingredientes = request.form.get("ingredientes", "").strip()
+        categoria = request.form.get("categoria", "Doces").strip()
+        valor = request.form.get("valor", 0)
+        quantidade = request.form.get("quantidade", 0)
+        foto_url = request.form.get("foto_url", "").strip()
+        arquivo = request.files.get("foto_arquivo")
+
+    if not nome or not ingredientes:
+        return jsonify({"sucesso": False, "mensagem": "Preencha o nome e os ingredientes do produto."}), 400
+
+    try:
+        valor_float = float(str(valor).replace(",", "."))
+        quantidade_int = int(quantidade)
+    except (ValueError, TypeError):
+        return jsonify({"sucesso": False, "mensagem": "Valor ou quantidade inválidos."}), 400
 
     foto_final = foto_url
 
@@ -43,8 +63,8 @@ def adicionar():
         arquivo.save(caminho_salvar)
         foto_final = f"/static/imagens/produtos/{nome_arquivo}"
 
-    Cardapio.adicionar(nome, ingredientes, categoria, valor, foto_final, quantidade)
-    Log.registrar(usuario["nome"], usuario["nivel_acesso"], f"Cadastrou produto: {nome} (Qtd: {quantidade})")
+    Cardapio.adicionar(nome, ingredientes, categoria, valor_float, foto_final, quantidade_int)
+    Log.registrar(usuario["nome"], usuario["nivel_acesso"], f"Cadastrou produto: {nome} (R$ {valor_float:.2f} | Qtd: {quantidade_int})")
     return jsonify({"sucesso": True, "mensagem": "Produto cadastrado com sucesso!"}), 201
 
 @cardapio_bp.route("/quantidade/<int:prato_id>", methods=["PUT"])

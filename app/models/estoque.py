@@ -27,6 +27,12 @@ class Estoque:
                                (insumo.strip(), float(quantidade), unidade.strip()))
 
     @staticmethod
+    def atualizar_quantidade(item_id, nova_qtd):
+        with Conexao() as cursor:
+            cursor.execute("UPDATE EstoqueInsumos SET quantidade = ? WHERE id = ?",
+                           (max(0.0, float(nova_qtd)), item_id))
+
+    @staticmethod
     def listar():
         with Conexao() as cursor:
             cursor.execute("SELECT * FROM EstoqueInsumos ORDER BY insumo ASC")

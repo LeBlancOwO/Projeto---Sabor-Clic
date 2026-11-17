@@ -16,8 +16,6 @@ def cadastro():
 
 @views_bp.route("/cardapio")
 def cardapio():
-    if "usuario" not in session:
-        return redirect(url_for("views.login"))
     return render_template("cardapio.html")
 
 @views_bp.route("/carrinho")
