@@ -1,4 +1,5 @@
 from app.models.conexao import Conexao
+import bcrypt
 
 class Cadastro:
 
@@ -18,14 +19,22 @@ class Cadastro:
                 CREATE TABLE IF NOT EXISTS Cadastro(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 nome VARCHAR(100) NOT NULL,
-                email VARCHAR(100) NOT NULL,
-                cpf VARCHAR(11) NOT NULL UNIQUE,
-                senha VARCHAR(50) NOT NULL,
-                nivel_acesso TEXT NOT NULL
+                email VARCHAR(100) NOT NULL UNIQUE CHECK(email LIKE '%@%'),
+                cpf TEXT NOT NULL UNIQUE CHECK(length(cpf) = 11),
+                senha TEXT NOT NULL,
+                nivel_acesso TEXT NOT NULL CHECK(nivel_acesso IN ('administrador', 'cozinheiro', 'cliente'))
                 )
             """)
 
     def Salvar(self):
+
+        if len(self.cpf) != 11:
+                        return {"sucesso": False, "mensagem": "O CPF deve possuir 11 dígitos"}
+        
+        if len(self.senha) < 8:
+            return {"sucesso": False, "mensagem": "A senha deve possuir no mínimo 8 caracteres"}
+        
+        senha_hash = Cadastro.GerarHash(self.senha)
 
         with Conexao() as cursor:
 
@@ -37,12 +46,32 @@ class Cadastro:
                 self.nome,
                 self.email,
                 self.cpf,
-                self.senha,
+                senha_hash,
                 self.nivel_acesso
             ))
 
+            return {"sucesso": True, "mensagem": "Usuário cadastrado"}
+
     @staticmethod
-    def Autenticar(email, cpf, senha, nivel_acesso):
+    def Autenticar(email, cpf, senha):
+
+        usuario = Cadastro.BuscarUsuario(email, cpf)
+
+        if not usuario: 
+             return None
+        
+        senha_correta = bcrypt.checkpw(
+             senha.encode(),
+             usuario[4].encode()
+        )
+
+        if senha_correta:
+             return usuario
+
+        return None
+
+    @staticmethod
+    def BuscarUsuario(email, cpf):
 
         with Conexao() as cursor:
 
@@ -51,10 +80,11 @@ class Cadastro:
                 FROM Cadastro
                 WHERE email = ?
                 AND cpf = ?
-                AND senha = ?
-                AND nivel_acesso = ?
-            """,(email, cpf, senha, nivel_acesso))
+            """, (email, cpf))
 
-            cadastro = cursor.fetchone()
+            return cursor.fetchone
 
-        return cadastro
+    @staticmethod
+    def GerarHash(senha):
+
+        return bcrypt.hashpw(senha.encode(), bcrypt.gensalt()).decode()
