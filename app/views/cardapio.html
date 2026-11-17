@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+<div class="page-wide">
+    <h2>Nosso Cardápio</h2>
+    <p>Escolha seus doces, bolos e salgados favoritos para adicionar ao pedido.</p>
+
+    <input type="search" id="filtro-cardapio" placeholder="🔍 Buscar por nome, ingrediente ou categoria..." style="width:100%; padding:.8rem 1.2rem; border-radius:16px; border:2px solid var(--rosa-claro); margin-top:1rem; font:inherit;">
+
+    <div id="grid-cardapio" class="cardapio-grid"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/cardapio.js') }}"></script>
+{% endblock %}

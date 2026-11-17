@@ -1,0 +1,30 @@
+.page-card {
+    background: var(--branco);
+    margin: 2.5rem auto;
+    padding: 2rem;
+    border-radius: 24px;
+    box-shadow: var(--sombra);
+    width: min(92%, 460px);
+}
+.page-card h2 { font-size: 2rem; margin-bottom: .3rem; }
+.page-card h3 { font: 400 1rem 'Poppins'; color: var(--marrom); margin-bottom: 1rem; }
+
+form label { display: block; margin: 1rem 0 .3rem; font-weight: 500; }
+form input, form select {
+    width: 100%;
+    padding: .7rem 1rem;
+    border: 2px solid var(--rosa-claro);
+    border-radius: 14px;
+    font: inherit;
+    color: var(--marrom);
+    background: var(--creme);
+    transition: border-color .2s;
+}
+body.dark-mode form input, body.dark-mode form select {
+    background: #2A1D20;
+    color: #fff;
+    border-color: #4D3237;
+}
+form input:focus, form select:focus { border-color: var(--rosa); outline: 0; }
+form .btn { width: 100%; margin-top: 1.5rem; }
+.link-extra { margin-top: 1.2rem; text-align: center; }

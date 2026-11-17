@@ -1,0 +1,31 @@
+.page-wide {
+    background: var(--branco);
+    margin: 2.5rem auto;
+    padding: 2rem;
+    border-radius: 24px;
+    box-shadow: var(--sombra);
+    width: min(94%, 960px);
+}
+.page-wide h2 { font-size: 2rem; margin-bottom: .6rem; }
+
+.table-wrap { overflow-x: auto; margin-top: 1.5rem; }
+table { width: 100%; border-collapse: collapse; }
+th { background: var(--rosa); color: #fff; text-align: left; padding: .8rem 1rem; }
+th:first-child { border-radius: 14px 0 0 0; }
+th:last-child { border-radius: 0 14px 0 0; }
+td { padding: .8rem 1rem; }
+tbody tr:nth-child(even) { background: var(--rosa-claro); }
+body.dark-mode tbody tr:nth-child(even) { background: #2A1D20; }
+
+/* ===== Badges de Status ===== */
+.badge { padding: .25rem .7rem; border-radius: 12px; font-size: .8rem; font-weight: 600; }
+.badge-aguardando { background: #FFE8A3; color: #7A5800; }
+.badge-preparo { background: #FFD1A3; color: #8A3B00; }
+.badge-pronto { background: #C8F7C5; color: #1E6B1B; }
+
+/* ===== Calendário de Reserva ===== */
+.calendario-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-top: 1.5rem; }
+.dia-box { padding: 1rem .5rem; text-align: center; border-radius: 12px; font-weight: 500; cursor: pointer; border: 2px solid transparent; transition: transform .2s; }
+.dia-livre { background: #E3F9E5; color: #1F6E24; border-color: #A3E4A8; }
+.dia-livre:hover { transform: scale(1.05); }
+.dia-ocupado { background: #FADBD8; color: #922B21; cursor: not-allowed; opacity: .75; }

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+<div class="page-card">
+    <h2>Cadastro</h2>
+    <h3>Crie sua conta de cliente</h3>
+    <form id="form-cadastro">
+        <label for="nome">Nome Completo</label>
+        <input id="nome" type="text" placeholder="Ex: Maria Silva" required>
+
+        <label for="usuario">Nome de Usuário (único)</label>
+        <input id="usuario" type="text" placeholder="Ex: maria.silva" required>
+
+        <label for="email">E-mail</label>
+        <input id="email" type="email" placeholder="Ex: maria@email.com" required>
+
+        <label for="cpf">CPF (apenas números)</label>
+        <input id="cpf" type="text" maxlength="11" placeholder="Ex: 12345678900" required>
+
+        <label for="senha">Senha (mínimo 8 caracteres)</label>
+        <input id="senha" type="password" minlength="8" placeholder="Crie uma senha segura" required>
+
+        <button class="btn btn-vinho" type="submit">Criar Conta</button>
+        <p style="text-align: center; margin-top: 1.2rem; font-size: .95rem;">
+        Já possui uma conta? <a href="/login" style="color: var(--vinho); font-weight: 600; text-decoration: underline;">Faça login aqui</a>
+    </p>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% endblock %}

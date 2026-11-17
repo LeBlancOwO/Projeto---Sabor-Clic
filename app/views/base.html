@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doce Celebração</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Playfair+Display:wght@500;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block css %}{% endblock %}
+</head>
+<body class="{{ 'dark-mode' if request.cookies.get('tema_preferido') == 'escuro' else '' }}">
+    <header class="site-header">
+        <a class="logo" href="{{ url_for('views.index') }}">
+            <img src="{{ url_for('static', filename='imagens/logo.png') }}" alt="Doce Celebração">
+        </a>
+
+        <nav class="nav" id="menu">
+            <a href="{{ url_for('views.index') }}">Início</a>
+            <a href="{{ url_for('views.cardapio') }}">Cardápio</a>
+            <a href="{{ url_for('views.servicos') }}">Reserva</a>
+
+            {% if session.get('usuario') %}
+                {% if session['usuario']['nivel_acesso'] in ('cozinheiro', 'administrador') %}
+                    <a href="{{ url_for('views.painel_cozinha') }}"><strong>Cozinha</strong></a>
+                {% endif %}
+                {% if session['usuario']['nivel_acesso'] == 'administrador' %}
+                    <a href="{{ url_for('views.painel_admin') }}"><strong>Admin</strong></a>
+                {% endif %}
+                <a href="#" id="btn-logout">Sair ({{ session['usuario']['usuario'] }})</a>
+            {% else %}
+                <a href="{{ url_for('views.login') }}">Login</a>
+            {% endif %}
+        </nav>
+
+        <div class="header-actions">
+            <label class="theme-switch" title="Alternar Modo Claro/Escuro">
+                <input type="checkbox" id="toggle-theme" {{ 'checked' if request.cookies.get('tema_preferido') == 'escuro' else '' }}>
+                <span class="theme-slider"></span>
+            </label>
+
+            <a class="icon-btn" href="{{ url_for('views.carrinho') }}" title="Meu Carrinho e Pedidos">
+                🛒<span id="cart-count">{{ session.get('carrinho', [])|length }}</span>
+            </a>
+        </div>
+    </header>
+
+    <main>
+        {% block conteudo %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div>
+                <h3>Doce Celebração</h3>
+                <p>Doces artesanais e buffet feitos com carinho para tornar cada comemoração inesquecível.</p>
+            </div>
+            <div>
+                <h3>Navegue</h3>
+                <a href="{{ url_for('views.index') }}">Início</a>
+                <a href="{{ url_for('views.cardapio') }}">Cardápio</a>
+                <a href="{{ url_for('views.servicos') }}">Reserva</a>
+                <a href="{{ url_for('views.carrinho') }}">Meu Carrinho</a>
+            </div>
+            <div>
+                <h3>Contato</h3>
+                <p>📞 (11) 99999-9999</p>
+                <p>✉️ contato@docecelebracao.com.br</p>
+                <p>📍 São Paulo - SP</p>
+                <p>🕒 Seg a Sáb: 08h às 19h</p>
+            </div>
+            <div>
+                <h3>Desenvolvedores</h3>
+                <p>Projeto Escolar — Sabor & Clic</p>
+                <p>• Matheus Consani</p>
+                <p>• Gabriele Pereira</p>
+                <p>• Gabriela de Paula</p>
+                <p>• Grazielly Seixas</p>
+            </div>
+        </div>
+        <p class="copy">© 2026 Doce Celebração. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

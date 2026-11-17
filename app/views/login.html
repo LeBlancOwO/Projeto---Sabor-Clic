@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+<div class="page-card">
+    <h2>Login</h2>
+    <h3>Acesse sua conta</h3>
+    <form id="form-login">
+        <label for="identificador">Usuário ou E-mail</label>
+        <input id="identificador" type="text" placeholder="Ex: maria.silva ou maria@email.com" required>
+
+        <label for="senha">Senha</label>
+        <input id="senha" type="password" placeholder="Digite sua senha" required>
+
+        <button class="btn btn-vinho" type="submit">Entrar</button>
+    </form>
+    <p class="link-extra">Não tem conta?<a href="{{ url_for('views.cadastro') }}"> Cadastre-se</a></p>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% endblock %}

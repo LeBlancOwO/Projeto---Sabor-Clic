@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+<div class="page-wide">
+    <h2>Meu Carrinho</h2>
+    <div id="area-carrinho" class="table-wrap"></div>
+    <button id="btn-finalizar" class="btn btn-vinho">Finalizar Pedido</button>
+
+    <hr style="margin: 2.5rem 0; border-color: var(--rosa-claro);">
+    <h2>Meus Pedidos (Status da Cozinha)</h2>
+    <div id="lista-meus-pedidos"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/carrinho.js') }}"></script>
+{% endblock %}

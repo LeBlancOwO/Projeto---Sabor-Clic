@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+<div class="page-wide">
+    <h2>Reserva de Buffet</h2>
+    <p>
+        Clique em uma data <strong style="color:#1F6E24">Verde (Livre)</strong> para reservar seu evento. 
+        Datas em <strong style="color:#922B21">Vermelho</strong> estão ocupadas e datas riscadas já passaram.
+    </p>
+    
+    <div class="filtro-mes-box">
+        <label for="mes-buffet">📅 Escolha o Mês e Ano do Evento:</label>
+        <input type="month" id="mes-buffet" class="input-mes-estilizado">
+    </div>
+
+    <div id="calendario-buffet" class="calendario-grid"></div>
+</div>
+
+<!-- Modal Estilizado para Reserva -->
+<div id="modal-reserva" class="modal-overlay">
+    <div class="modal-box">
+        <button type="button" class="modal-fechar" id="fechar-modal" aria-label="Fechar">×</button>
+        <h3>Reservar Buffet</h3>
+        <p id="modal-data-texto" style="font-weight: 500; color: var(--vinho); margin-bottom: .8rem;"></p>
+
+        <form id="form-modal-reserva">
+            <input type="hidden" id="reserva-data-iso">
+
+            <label for="reserva-tipo">Tipo de Evento</label>
+            <select id="reserva-tipo" required>
+                <option value="Aniversário">Aniversário</option>
+                <option value="Casamento">Casamento</option>
+                <option value="Formatura">Formatura</option>
+                <option value="Evento Corporativo">Evento Corporativo</option>
+                <option value="Outro Evento">Outro Evento</option>
+            </select>
+
+            <label for="reserva-convidados">Quantidade de Convidados</label>
+            <input id="reserva-convidados" type="number" min="10" max="500" value="50" required>
+
+            <div class="modal-acoes">
+                <button type="button" class="btn" id="cancelar-modal">Cancelar</button>
+                <button type="submit" class="btn btn-vinho">Confirmar Reserva</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/buffet.js') }}"></script>
+{% endblock %}
