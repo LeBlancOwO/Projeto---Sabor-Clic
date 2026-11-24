@@ -222,9 +222,9 @@ Recarregue com `Ctrl + Shift + R` para limpar o cache do navegador e confira se 
 ## 👩‍💻 Autores
 
 - [Gabriela de Paula Silvestre Correa](https://www.google.com/search?q=https://github.com/EuGranola)
-- [Gabrielle Pereira do Amaral](https://www.google.com/search?q=https://github.com/LeBlancOwO)
-- Grazielly Seixas Gaspar
-- Matheus Consani Mercom França
+- [Gabrielle Pereira do Amaral]((https://github.com/LeBlancOwO))
+- [Grazielly Seixas Gaspar] ()
+- [Matheus Consani Mercom França] ()
 
 ---
 
