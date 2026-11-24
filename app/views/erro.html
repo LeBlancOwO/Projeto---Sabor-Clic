@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block titulo %}{{ codigo }} — {{ titulo }}{% endblock %}
+
+{% block css_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/erro.css') }}">
+{% endblock %}
+
+{% block conteudo %}
+<section class="erro-pagina">
+    <div class="erro-card">
+        <div class="erro-icone" aria-hidden="true">{{ icone }}</div>
+        <p class="erro-codigo">{{ codigo }}</p>
+        <h2>{{ titulo }}</h2>
+        <p class="erro-mensagem">{{ mensagem }}</p>
+
+        <div class="erro-acoes">
+            <button type="button" class="btn" id="btn-voltar">← Voltar</button>
+            <a class="btn btn-vinho" href="{{ url_for('views.index') }}">Ir para o início</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/erro.js') }}"></script>
+{% endblock %}

@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block css_cardapio %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/cardapio.css') }}">
+{% endblock %}
+
 {% block conteudo %}
 <div class="page-wide">
     <h2>Nosso Cardápio</h2>

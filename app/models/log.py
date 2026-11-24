@@ -33,12 +33,28 @@ class Log:
             print(f"Erro ao gravar log: {e}")
 
     @staticmethod
-    def listar_recentes(limite=50):
+    def listar_recentes(limite=100):
         with Conexao() as cursor:
             cursor.execute("""
                 SELECT id, data_hora, usuario_nome, nivel_acesso, acao
                 FROM Logs
                 ORDER BY id DESC
                 LIMIT ?
-            """, (limite,))
+            """, (int(limite),))
             return [dict(row) for row in cursor.fetchall()]
+
+    @staticmethod
+    def gerar_conteudo_txt():
+        with Conexao() as cursor:
+            cursor.execute("SELECT id, data_hora, usuario_nome, nivel_acesso, acao FROM Logs ORDER BY id DESC")
+            registros = cursor.fetchall()
+
+        linhas = [
+            "=========================================================================",
+            "RELATÓRIO DE LOGS DE AUDITORIA — SABOR & CLIC (DARK KITCHEN)",
+            f"Gerado em: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}",
+            "=========================================================================\n"
+        ]
+        for r in registros:
+            linhas.append(f"[#{r['id']}] {r['data_hora']} | {r['usuario_nome']} ({r['nivel_acesso']}) -> {r['acao']}")
+        return "\n".join(linhas)

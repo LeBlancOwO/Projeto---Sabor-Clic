@@ -1,13 +1,20 @@
+import os
 import sqlite3
 
+
 class Conexao:
-    BANCO = "banco.db"
+    # Caminho absoluto: não depende de onde você roda o "python"
+    BANCO = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+        "banco.db",
+    )
 
     @classmethod
     def conectar(cls):
-        conn = sqlite3.connect(cls.BANCO)
+        conn = sqlite3.connect(cls.BANCO, timeout=10)
         conn.row_factory = sqlite3.Row
         conn.execute("PRAGMA foreign_keys = ON;")
+        conn.execute("PRAGMA journal_mode = WAL;")
         return conn
 
     def __enter__(self):

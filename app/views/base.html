@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doce Celebração</title>
+    <title>{% block titulo %}Doce Celebração{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Playfair+Display:wght@500;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    {% block css_home %}{% endblock %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/cardapio.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/internos.css') }}">
+    {% block css_cardapio %}{% endblock %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/internos.css') }}">
+    {% block css_extra %}{% endblock %}
     <link rel="icon" href="{{ url_for('static', filename='imagens/logo.png') }}" type="image/png">
 </head>
 <body class="{{ 'dark-mode' if request.cookies.get('tema_preferido') == 'escuro' else '' }}">
@@ -43,7 +46,7 @@
             </label>
 
             <a class="icon-btn" href="{{ url_for('views.carrinho') }}" title="Meu Carrinho e Pedidos">
-                🛒<span id="cart-count">{{ session.get('carrinho', [])|length }}</span>
+                🛒<span id="cart-count">0</span>
             </a>
         </div>
     </header>
@@ -56,7 +59,7 @@
         <div class="footer-grid">
             <div>
                 <h3>Doce Celebração</h3>
-                <p>Doces artesanais e buffet feitos com carinho para tornar cada comemoração inesquecível.</p>
+                <p>Doces artesanais e estrutura Dark Kitchen feitos com carinho para tornar cada comemoração inesquecível.</p>
             </div>
             <div>
                 <h3>Navegue</h3>

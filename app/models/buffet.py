@@ -1,5 +1,12 @@
-from app.models.conexao import Conexao
+import re
 import sqlite3
+from datetime import date, datetime, timedelta
+from app.models.conexao import Conexao
+
+MAX_PESSOAS = 15
+MAX_DIAS_ANTECEDENCIA = 730  # ~2 anos
+PADRAO_MES = re.compile(r"^\d{4}-(0[1-9]|1[0-2])$")
+
 
 class Buffet:
     @staticmethod
@@ -19,45 +26,71 @@ class Buffet:
                 CREATE TABLE IF NOT EXISTS DatasBloqueadas (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     data_bloqueada TEXT NOT NULL UNIQUE,
-                    motivo TEXT DEFAULT 'Indisponível'
+                    motivo TEXT DEFAULT 'Manutenção / Indisponível'
                 )
             """)
 
     @staticmethod
-    def reservar(usuario_id, data_evento, tipo_evento, qtd_convidados):
-        data_limpa = str(data_evento).strip()[:10]
-        with Conexao() as cursor:
-            cursor.execute("SELECT 1 FROM DatasBloqueadas WHERE data_bloqueada = ?", (data_limpa,))
-            if cursor.fetchone():
-                return {"sucesso": False, "mensagem": "Esta data está bloqueada na agenda do buffet."}
+    def normalizar_data(valor):
+        """Converte 'YYYY-MM-DD' em date. Retorna None se for inválida."""
         try:
+            return datetime.strptime(str(valor).strip()[:10], "%Y-%m-%d").date()
+        except ValueError:
+            return None
+
+    @staticmethod
+    def reservar(usuario_id, data_evento, tipo_evento, qtd_convidados):
+        data = Buffet.normalizar_data(data_evento)
+        if not data:
+            return {"sucesso": False, "mensagem": "Data inválida."}
+
+        hoje = date.today()
+        if data < hoje:
+            return {"sucesso": False, "mensagem": "Não é possível reservar uma data que já passou."}
+        if data > hoje + timedelta(days=MAX_DIAS_ANTECEDENCIA):
+            return {"sucesso": False, "mensagem": "Escolha uma data dentro dos próximos 2 anos."}
+
+        try:
+            qtd = int(qtd_convidados)
+        except (ValueError, TypeError):
+            return {"sucesso": False, "mensagem": "Quantidade de pessoas inválida."}
+        if not 1 <= qtd <= MAX_PESSOAS:
+            return {"sucesso": False, "mensagem": f"A equipe deve ter entre 1 e {MAX_PESSOAS} pessoas."}
+
+        tipo = str(tipo_evento).strip()[:80]
+        if not tipo:
+            return {"sucesso": False, "mensagem": "Informe a finalidade da reserva."}
+
+        data_iso = data.isoformat()
+        try:
+            # Verificação e inserção na mesma transação
             with Conexao() as cursor:
+                cursor.execute("SELECT 1 FROM DatasBloqueadas WHERE data_bloqueada = ?", (data_iso,))
+                if cursor.fetchone():
+                    return {"sucesso": False, "mensagem": "Esta data está bloqueada na agenda da cozinha."}
                 cursor.execute("""
                     INSERT INTO ReservasBuffet (usuario_id, data_evento, tipo_evento, qtd_convidados)
                     VALUES (?, ?, ?, ?)
-                """, (usuario_id, data_limpa, tipo_evento, int(qtd_convidados)))
-            return {"sucesso": True, "mensagem": f"Buffet reservado para {data_limpa}!"}
+                """, (int(usuario_id), data_iso, tipo, qtd))
+            return {"sucesso": True, "mensagem": f"Cozinha reservada com sucesso para {data.strftime('%d/%m/%Y')}!"}
         except sqlite3.IntegrityError:
-            return {"sucesso": False, "mensagem": "Esta data já está reservada por outro cliente."}
+            return {"sucesso": False, "mensagem": "Esta data já está reservada por outro chef/cliente."}
 
     @staticmethod
     def listar_datas_ocupadas(mes_ano=None):
+        mes_ano = (mes_ano or "").strip()
+        if mes_ano and not PADRAO_MES.match(mes_ano):
+            return []
+
+        filtro = f"{mes_ano}-%" if mes_ano else "%"
         with Conexao() as cursor:
-            if mes_ano:
-                filtro = f"{mes_ano.strip()}%"
-                cursor.execute("SELECT data_evento FROM ReservasBuffet WHERE data_evento LIKE ?", (filtro,))
-                reservadas = [str(r["data_evento"]).strip()[:10] for r in cursor.fetchall()]
-
-                cursor.execute("SELECT data_bloqueada FROM DatasBloqueadas WHERE data_bloqueada LIKE ?", (filtro,))
-                bloqueadas = [str(r["data_bloqueada"]).strip()[:10] for r in cursor.fetchall()]
-            else:
-                cursor.execute("SELECT data_evento FROM ReservasBuffet")
-                reservadas = [str(r["data_evento"]).strip()[:10] for r in cursor.fetchall()]
-
-                cursor.execute("SELECT data_bloqueada FROM DatasBloqueadas")
-                bloqueadas = [str(r["data_bloqueada"]).strip()[:10] for r in cursor.fetchall()]
-
-            return list(set(reservadas + bloqueadas))
+            cursor.execute("""
+                SELECT data_evento AS data FROM ReservasBuffet WHERE data_evento LIKE ?
+                UNION
+                SELECT data_bloqueada FROM DatasBloqueadas WHERE data_bloqueada LIKE ?
+                ORDER BY 1
+            """, (filtro, filtro))
+            return [row["data"] for row in cursor.fetchall()]
 
     @staticmethod
     def listar_todas():
@@ -80,30 +113,40 @@ class Buffet:
                 FROM ReservasBuffet r
                 JOIN Cadastro c ON r.usuario_id = c.id
                 WHERE r.id = ?
-            """, (reserva_id,))
+            """, (int(reserva_id),))
             dados = cursor.fetchone()
             if not dados:
                 return None
-            cursor.execute("DELETE FROM ReservasBuffet WHERE id = ?", (reserva_id,))
+            cursor.execute("DELETE FROM ReservasBuffet WHERE id = ?", (int(reserva_id),))
             return dict(dados)
 
     @staticmethod
-    def bloquear_data(data_str, motivo="Indisponível"):
-        data_limpa = str(data_str).strip()[:10]
+    def bloquear_data(data_str, motivo=None):
+        """Retorna (sucesso, mensagem)."""
+        data = Buffet.normalizar_data(data_str)
+        if not data:
+            return False, "Data inválida."
+
+        data_iso = data.isoformat()
+        motivo_limpo = str(motivo or "").strip()[:100] or "Manutenção / Indisponível"
+
         try:
             with Conexao() as cursor:
+                cursor.execute("SELECT 1 FROM ReservasBuffet WHERE data_evento = ?", (data_iso,))
+                if cursor.fetchone():
+                    return False, "Já existe uma reserva nesta data. Cancele a reserva primeiro."
                 cursor.execute(
                     "INSERT INTO DatasBloqueadas (data_bloqueada, motivo) VALUES (?, ?)",
-                    (data_limpa, motivo or "Indisponível")
+                    (data_iso, motivo_limpo)
                 )
-            return True
+            return True, "Data bloqueada na agenda da cozinha!"
         except sqlite3.IntegrityError:
-            return False
+            return False, "Essa data já está bloqueada."
 
     @staticmethod
     def desbloquear_data(bloqueio_id):
         with Conexao() as cursor:
-            cursor.execute("DELETE FROM DatasBloqueadas WHERE id = ?", (bloqueio_id,))
+            cursor.execute("DELETE FROM DatasBloqueadas WHERE id = ?", (int(bloqueio_id),))
 
     @staticmethod
     def listar_bloqueios():

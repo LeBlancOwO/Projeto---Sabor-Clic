@@ -1,36 +1,38 @@
+// Cardápio. Depende de main.js.
+
 let pratosCache = [];
 
-function toastCardapio(titulo, msg, tipo = "sucesso") {
-    const ant = document.querySelector(".toast-aviso");
-    if (ant) ant.remove();
-    const t = document.createElement("div");
-    t.className = `toast-aviso ${tipo}`;
-    t.innerHTML = `<strong>${titulo}</strong><span>${msg}</span>`;
-    document.body.appendChild(t);
-    setTimeout(() => t.remove(), 2500);
-}
-
 document.addEventListener("DOMContentLoaded", async () => {
-    try {
-        const res = await fetch("/api/cardapio/listar");
-        const data = await res.json();
-        pratosCache = data.pratos || [];
-        renderizarCards(pratosCache);
-    } catch (erro) {
-        console.error("Erro ao carregar cardápio:", erro);
-        renderizarCards([]);
+    const grid = document.getElementById("grid-cardapio");
+    const inputFiltro = document.getElementById("filtro-cardapio");
+
+    const { ok, data } = await api("/api/cardapio/listar");
+    pratosCache = ok ? (data.pratos || []) : [];
+    renderizarCards(pratosCache);
+
+    // Filtro com debounce (não redesenha a cada tecla)
+    if (inputFiltro) {
+        let timer;
+        inputFiltro.addEventListener("input", (e) => {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                const termo = e.target.value.toLowerCase().trim();
+                renderizarCards(pratosCache.filter(p =>
+                    p.nome.toLowerCase().includes(termo) ||
+                    p.ingredientes.toLowerCase().includes(termo) ||
+                    p.categoria.toLowerCase().includes(termo)
+                ));
+            }, 200);
+        });
     }
 
-    const inputFiltro = document.getElementById("filtro-cardapio");
-    if (inputFiltro) {
-        inputFiltro.addEventListener("input", (e) => {
-            const termo = e.target.value.toLowerCase();
-            const filtrados = pratosCache.filter(p =>
-                p.nome.toLowerCase().includes(termo) ||
-                p.ingredientes.toLowerCase().includes(termo) ||
-                p.categoria.toLowerCase().includes(termo)
-            );
-            renderizarCards(filtrados);
+    // Clique em "+ Carrinho"
+    if (grid) {
+        grid.addEventListener("click", (e) => {
+            const btn = e.target.closest(".js-add-carrinho");
+            if (!btn || btn.disabled) return;
+            const prato = pratosCache.find(p => p.id === Number(btn.dataset.id));
+            if (prato) adicionarCarrinho(prato);
         });
     }
 });
@@ -52,23 +54,22 @@ function renderizarCards(lista) {
 
     grid.style.display = "grid";
     grid.innerHTML = lista.map(p => {
-        const esgotado = p.quantidade <= 0;
+        const indisponivel = p.quantidade <= 0 || !p.ativo;
+        const rotuloBadge = p.quantidade <= 0 ? "Esgotado" : (!p.ativo ? "Inativo" : `${p.quantidade} disp.`);
         return `
         <div class="produto-card">
             <div class="produto-img-wrap">
-                <img src="${p.foto}" alt="${p.nome}" onerror="this.src='/static/imagens/doces.jpg'">
-                <span class="produto-qtd-badge ${esgotado ? 'esgotado' : ''}">
-                    ${esgotado ? 'Esgotado' : `${p.quantidade} disp.`}
-                </span>
+                <img src="${esc(p.foto)}" alt="${esc(p.nome)}" onerror="this.src='/static/imagens/doces.jpg'">
+                <span class="produto-qtd-badge ${indisponivel ? "esgotado" : ""}">${rotuloBadge}</span>
             </div>
             <div class="produto-info">
-                <h3 class="produto-titulo">${p.nome}</h3>
-                <p class="produto-subtitulo">${p.ingredientes}</p>
+                <h3 class="produto-titulo">${esc(p.nome)}</h3>
+                <p class="produto-subtitulo">${esc(p.ingredientes)}</p>
                 <div class="produto-rodape">
                     <span class="produto-preco">R$ ${Number(p.valor).toFixed(2)}</span>
-                    <button class="btn btn-vinho" ${esgotado ? 'disabled style="opacity:.5;cursor:not-allowed;"' : ''}
-                        onclick="adicionarCarrinho(${p.id}, '${p.nome.replace(/'/g, "\\'")}', ${p.valor}, ${p.quantidade})">
-                        ${esgotado ? 'Indisponível' : '+ Carrinho'}
+                    <button type="button" class="btn btn-vinho js-add-carrinho" data-id="${p.id}"
+                        ${indisponivel ? 'disabled style="opacity:.5;cursor:not-allowed;"' : ""}>
+                        ${indisponivel ? "Indisponível" : "+ Carrinho"}
                     </button>
                 </div>
             </div>
@@ -76,32 +77,39 @@ function renderizarCards(lista) {
     }).join("");
 }
 
-function adicionarCarrinho(id, nome, valor, estoqueMax) {
+function lerCarrinho() {
+    try {
+        const c = JSON.parse(localStorage.getItem("carrinho") || "[]");
+        return Array.isArray(c) ? c : [];
+    } catch {
+        return [];
+    }
+}
+
+function adicionarCarrinho(prato) {
+    const novoItem = { id: prato.id, nome: prato.nome, valor: Number(prato.valor), quantidade: 1 };
+
+    // Visitante sem login: guarda o item e leva para o login
     if (typeof USUARIO_LOGADO !== "undefined" && !USUARIO_LOGADO) {
-        sessionStorage.setItem("item_pendente_carrinho", JSON.stringify({
-            id: id,
-            nome: nome,
-            valor: Number(valor),
-            quantidade: 1
-        }));
+        sessionStorage.setItem("item_pendente_carrinho", JSON.stringify(novoItem));
         window.location.href = "/login?aviso=carrinho";
         return;
     }
 
-    let carrinho = JSON.parse(localStorage.getItem("carrinho") || "[]");
-    const item = carrinho.find(i => i.id === id);
+    const carrinho = lerCarrinho();
+    const item = carrinho.find(i => i.id === prato.id);
 
     if (item) {
-        if (estoqueMax && item.quantidade >= estoqueMax) {
-            toastCardapio("Estoque Limite", "Você atingiu a quantidade máxima disponível.", "erro");
+        if (prato.quantidade && item.quantidade >= prato.quantidade) {
+            mostrarToast("Estoque Limite", "Você atingiu a quantidade máxima disponível.", "erro", 2500);
             return;
         }
         item.quantidade += 1;
     } else {
-        carrinho.push({ id, nome, valor: Number(valor), quantidade: 1 });
+        carrinho.push(novoItem);
     }
 
     localStorage.setItem("carrinho", JSON.stringify(carrinho));
-    if (typeof atualizarBadgeCarrinho === "function") atualizarBadgeCarrinho();
+    atualizarBadgeCarrinho();
     window.location.href = "/carrinho";
 }

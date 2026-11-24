@@ -22,7 +22,7 @@
                 <option value="Bolos">Bolos</option>
                 <option value="Sobremesas">Sobremesas</option>
                 <option value="Salgadinhos">Salgadinhos</option>
-                <option value="Buffet">Buffet</option>
+                <option value="Cozinha">Cozinha</option>
             </select>
         </div>
         <div style="grid-column: span 2;">
@@ -63,12 +63,13 @@
 
     <hr style="margin: 2.5rem 0; border-color: var(--rosa-claro);">
 
-    <h3>4. Reservas de Buffet Agendadas</h3>
+    <h3>4. Reservas de Cozinha Agendadas</h3>
     <p><small>Visualização para preparo da equipe (apenas o administrador pode cancelar reservas).</small></p>
     <div id="cozinha-reservas" class="table-wrap"></div>
 </div>
 {% endblock %}
 
 {% block scripts %}
+<script src="{{ url_for('static', filename='js/produtos.js') }}"></script>
 <script src="{{ url_for('static', filename='js/cozinha.js') }}"></script>
 {% endblock %}

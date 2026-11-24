@@ -1,7 +1,8 @@
+import os
 from app import create_app
 
 app = create_app()
 
-if __name__ == '__main__':
-    print("Servidor iniciado! Admin padrão: admin@docecelebracao.com | CPF: 00000000000 | Senha: admin1234")
-    app.run(debug=True)
+if __name__ == "__main__":
+    # debug só liga se você pedir: $env:FLASK_DEBUG = "1"
+    app.run(debug=os.environ.get("FLASK_DEBUG") == "1")

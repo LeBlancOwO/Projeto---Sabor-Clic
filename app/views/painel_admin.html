@@ -25,7 +25,7 @@
                 <option value="Bolos">Bolos</option>
                 <option value="Sobremesas">Sobremesas</option>
                 <option value="Salgadinhos">Salgadinhos</option>
-                <option value="Buffet">Buffet</option>
+                <option value="Cozinha">Cozinha</option>
             </select>
         </div>
         <div style="grid-column: span 2;">
@@ -56,8 +56,8 @@
 
     <hr style="margin: 2.5rem 0; border-color: var(--rosa-claro);">
 
-    <!-- 3. Reservas de Buffet -->
-    <h3>3. Reservas de Buffet Agendadas</h3>
+    <!-- 3. Reservas de Cozinhas -->
+    <h3>3. Reservas de Cozinhas Agendadas</h3>
     <div id="adm-reservas" class="table-wrap"></div>
 
     <hr style="margin: 2.5rem 0; border-color: var(--rosa-claro);">
@@ -77,12 +77,17 @@
     </form>
     <div id="adm-bloqueios" class="table-wrap"></div>
 
-    <!-- 4. Logs de Auditoria -->
-    <h3>4. Logs de Auditoria do Sistema</h3>
+    <hr style="margin: 2.5rem 0; border-color: var(--rosa-claro);">
+    <!-- 5. Logs de Auditoria -->
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <h3>5. Logs de Auditoria do Sistema</h3>
+        <a href="/api/admin/logs/download" class="btn btn-vinho" style="margin:0;">📥 Baixar Logs (.txt)</a>
+    </div>
     <div id="adm-logs" class="table-wrap"></div>
 </div>
 {% endblock %}
 
 {% block scripts %}
+<script src="{{ url_for('static', filename='js/produtos.js') }}"></script>
 <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
 {% endblock %}

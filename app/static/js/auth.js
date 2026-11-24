@@ -1,116 +1,88 @@
-function mostrarNotificacao(titulo, mensagem, tipo = "sucesso") {
-    const anterior = document.querySelector(".toast-aviso");
-    if (anterior) anterior.remove();
-
-    const toast = document.createElement("div");
-    toast.className = `toast-aviso ${tipo}`;
-    toast.innerHTML = `<strong>${titulo}</strong><span>${mensagem}</span>`;
-    document.body.appendChild(toast);
-
-    setTimeout(() => {
-        toast.style.opacity = "0";
-        toast.style.transition = "opacity .4s ease";
-        setTimeout(() => toast.remove(), 400);
-    }, 3200);
-}
+// Login e cadastro. Depende de main.js.
 
 document.addEventListener("DOMContentLoaded", () => {
     const params = new URLSearchParams(window.location.search);
     if (params.get("aviso") === "carrinho") {
-        mostrarNotificacao(
-            "Quase lá! 🛒",
-            "Faça login na sua conta para adicionar o item ao carrinho.",
-            "sucesso"
-        );
+        mostrarToast("Quase lá! 🛒", "Faça login na sua conta para adicionar o item ao carrinho.", "sucesso");
     }
 
-    // 1. Login
+    // ----- Login -----
     const formLogin = document.getElementById("form-login");
     if (formLogin) {
         formLogin.addEventListener("submit", async (e) => {
             e.preventDefault();
-            try {
-                const res = await fetch("/api/auth/logar", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        identificador: document.getElementById("identificador").value,
-                        senha: document.getElementById("senha").value
-                    })
-                });
-                const data = await res.json();
-                if (data.sucesso) {
-                    const pendenteRaw = sessionStorage.getItem("item_pendente_carrinho");
+            const botao = formLogin.querySelector('button[type="submit"]');
+            if (botao) botao.disabled = true;
 
-                    if (pendenteRaw) {
-                        const pendente = JSON.parse(pendenteRaw);
-                        let carrinho = JSON.parse(localStorage.getItem("carrinho") || "[]");
-                        const existente = carrinho.find(i => i.id === pendente.id);
+            const { data } = await apiJson("/api/auth/logar", "POST", {
+                identificador: document.getElementById("identificador").value,
+                senha: document.getElementById("senha").value
+            });
 
-                        if (existente) existente.quantidade += 1;
-                        else carrinho.push(pendente);
-
-                        localStorage.setItem("carrinho", JSON.stringify(carrinho));
-                        sessionStorage.removeItem("item_pendente_carrinho");
-                        if (typeof atualizarBadgeCarrinho === "function") atualizarBadgeCarrinho();
-                    }
-
-                    mostrarNotificacao(
-                        `Bem-vindo(a), ${data.usuario.nome.split(" ")[0]}!`,
-                        pendenteRaw ? "Item adicionado! Abrindo seu carrinho..." : "Login realizado com sucesso. Redirecionando...",
-                        "sucesso"
-                    );
-
-                    setTimeout(() => {
-                        if (pendenteRaw) window.location.href = "/carrinho";
-                        else if (data.usuario.nivel_acesso === "administrador") window.location.href = "/admin";
-                        else if (data.usuario.nivel_acesso === "cozinheiro") window.location.href = "/cozinha";
-                        else window.location.href = "/cardapio";
-                    }, 1000);
-                } else {
-                    mostrarNotificacao("Ops! Algo deu errado", data.mensagem, "erro");
-                }
-            } catch (erro) {
-                console.error(erro);
-                mostrarNotificacao("Erro de conexão", "Não foi possível conectar ao servidor.", "erro");
+            if (!data.sucesso) {
+                if (botao) botao.disabled = false;
+                mostrarToast("Ops! Algo deu errado", data.mensagem || "Não foi possível entrar.", "erro");
+                return;
             }
+
+            // Item que o visitante tentou adicionar antes de logar
+            const pendenteRaw = sessionStorage.getItem("item_pendente_carrinho");
+            if (pendenteRaw) {
+                try {
+                    const pendente = JSON.parse(pendenteRaw);
+                    let carrinho = [];
+                    try { carrinho = JSON.parse(localStorage.getItem("carrinho") || "[]"); } catch { carrinho = []; }
+
+                    const existente = carrinho.find(i => i.id === pendente.id);
+                    if (existente) existente.quantidade += 1;
+                    else carrinho.push(pendente);
+
+                    localStorage.setItem("carrinho", JSON.stringify(carrinho));
+                    atualizarBadgeCarrinho();
+                } catch (erro) {
+                    console.warn("Item pendente inválido:", erro);
+                }
+                sessionStorage.removeItem("item_pendente_carrinho");
+            }
+
+            mostrarToast(
+                `Bem-vindo(a), ${data.usuario.nome.split(" ")[0]}!`,
+                pendenteRaw ? "Item adicionado! Abrindo seu carrinho..." : "Login realizado com sucesso. Redirecionando...",
+                "sucesso"
+            );
+
+            setTimeout(() => {
+                if (pendenteRaw) window.location.href = "/carrinho";
+                else if (data.usuario.nivel_acesso === "administrador") window.location.href = "/admin";
+                else if (data.usuario.nivel_acesso === "cozinheiro") window.location.href = "/cozinha";
+                else window.location.href = "/cardapio";
+            }, 1000);
         });
     }
 
-    // 2. Cadastro
+    // ----- Cadastro -----
     const formCadastro = document.getElementById("form-cadastro");
     if (formCadastro) {
         formCadastro.addEventListener("submit", async (e) => {
             e.preventDefault();
-            try {
-                const res = await fetch("/api/auth/cadastrar", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        nome: document.getElementById("nome").value,
-                        usuario: document.getElementById("usuario").value,
-                        email: document.getElementById("email").value,
-                        cpf: document.getElementById("cpf").value,
-                        senha: document.getElementById("senha").value,
-                        nivel_acesso: "cliente"
-                    })
-                });
-                const data = await res.json();
-                if (data.sucesso) {
-                    mostrarNotificacao(
-                        "🎉 Parabéns pelo cadastro!",
-                        "Sua conta na Doce Celebração foi criada. Agora faça seu login!",
-                        "sucesso"
-                    );
-                    setTimeout(() => {
-                        window.location.href = "/login";
-                    }, 2200);
-                } else {
-                    mostrarNotificacao("Atenção", data.mensagem, "erro");
-                }
-            } catch (erro) {
-                console.error(erro);
-                mostrarNotificacao("Erro de conexão", "Verifique se o servidor está rodando.", "erro");
+            const botao = formCadastro.querySelector('button[type="submit"]');
+            if (botao) botao.disabled = true;
+
+            const { data } = await apiJson("/api/auth/cadastrar", "POST", {
+                nome: document.getElementById("nome").value,
+                usuario: document.getElementById("usuario").value,
+                email: document.getElementById("email").value,
+                cpf: document.getElementById("cpf").value,
+                senha: document.getElementById("senha").value,
+                nivel_acesso: "cliente"
+            });
+
+            if (data.sucesso) {
+                mostrarToast("🎉 Parabéns pelo cadastro!", "Sua conta na Doce Celebração foi criada. Agora faça seu login!", "sucesso");
+                setTimeout(() => { window.location.href = "/login"; }, 2200);
+            } else {
+                if (botao) botao.disabled = false;
+                mostrarToast("Atenção", data.mensagem || "Não foi possível cadastrar.", "erro");
             }
         });
     }

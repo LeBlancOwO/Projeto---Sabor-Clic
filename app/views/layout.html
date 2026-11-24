@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block css_home %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
 {% block conteudo %}
 
 <section class="hero" aria-label="Destaques">
@@ -18,7 +22,7 @@
         </article>
 
         <article class="slide slide-buffet">
-            <h2>Buffet</h2>
+            <h2>Cozinha</h2>
             <p>para celebrar com sabor!</p>
             <a class="btn" href="{{ url_for('views.servicos') }}">Clique aqui</a>
         </article>
@@ -43,7 +47,7 @@
         <a class="cat" href="{{ url_for('views.cardapio') }}"><div class="img cat-bolos"></div><span>Bolos</span></a>
         <a class="cat" href="{{ url_for('views.cardapio') }}"><div class="img cat-sobremesas"></div><span>Sobremesas</span></a>
         <a class="cat" href="{{ url_for('views.cardapio') }}"><div class="img cat-salgadinhos"></div><span>Salgadinhos</span></a>
-        <a class="cat" href="{{ url_for('views.servicos') }}"><div class="img cat-buffet"></div><span>Buffet</span></a>
+        <a class="cat" href="{{ url_for('views.servicos') }}"><div class="img cat-buffet"></div><span>Cozinha</span></a>
     </div>
 </section>
 

@@ -1,6 +1,8 @@
 from app.models.conexao import Conexao
 import bcrypt
 import sqlite3
+import os 
+import secrets
 
 class Cadastro:
     def __init__(self, nome, usuario, email, cpf, senha, nivel_acesso="cliente"):
@@ -70,18 +72,18 @@ class Cadastro:
         return None
 
     @staticmethod
-    def listar_todos():
-        with Conexao() as cursor:
-            cursor.execute("SELECT id, nome, usuario, email, cpf, nivel_acesso FROM Cadastro")
-            return [dict(row) for row in cursor.fetchall()]
-
-    @staticmethod
     def criar_admin_padrao():
         with Conexao() as cursor:
             cursor.execute("SELECT id FROM Cadastro WHERE nivel_acesso = 'administrador'")
-            if not cursor.fetchone():
-                admin = Cadastro("Admin Master", "admin", "admin@docecelebracao.com", "00000000000", "admin1234", "administrador")
-                admin.salvar()
+            existe = cursor.fetchone()
+        if existe:
+            return
+
+        senha = os.environ.get("ADMIN_SENHA") or secrets.token_urlsafe(10)
+        admin = Cadastro("Admin Master", "admin", "admin@docecelebracao.com", "00000000000", senha, "administrador")
+        admin.salvar()
+        if not os.environ.get("ADMIN_SENHA"):
+            print(f"[SETUP] Admin criado. Usuário: admin | Senha gerada: {senha}  (anote, ela não aparece de novo)")
                 
     @staticmethod
     def listar_todos():
