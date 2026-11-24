@@ -6,11 +6,11 @@
 
 Site de uma doceria com cardápio, cadastro, login, pedidos, painel de cozinha, administração e contratação de serviços de buffet.
 
-
-
-
-
-
+![Python](https://img.shields.io/badge/Python-3.10+-A83F50?style=for-the-badge&logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-Back--end-E98C9C?style=for-the-badge&logo=flask&logoColor=white)
+![HTML5](https://img.shields.io/badge/HTML5-Front--end-C96D7D?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-Estilo-795044?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-Interações-F8DADD?style=for-the-badge&logo=javascript&logoColor=A83F50)
 
 [Sobre](#-sobre-o-projeto) · [Funcionalidades](#-funcionalidades) · [Identidade visual](#-identidade-visual) · [Como executar](#-como-baixar-e-executar) · [Rotas](#-rotas-e-perfis-de-acesso) · [Estrutura](#-estrutura-do-projeto) · [Problemas comuns](#-problemas-comuns)
 
@@ -46,11 +46,11 @@ A **Doce Celebração** apresenta doces, bolos, sobremesas e serviços de buffet
 
 | Cor | Código | Uso |
 |---|---|---|
-|  Rosa-claro | `#F8DADD` | Fundos suaves e botões |
-|  Rosa | `#E98C9C` | Destaques e faixa de benefícios |
-|  Rosa antigo | `#C96D7D` | Hover dos botões |
-|  Marrom | `#795044` | Textos e rodapé |
-|  Vinho | `#A83F50` | Títulos e botões principais |
+| ![](https://img.shields.io/badge/-%20%20%20-F8DADD) Rosa-claro | `#F8DADD` | Fundos suaves e botões |
+| ![](https://img.shields.io/badge/-%20%20%20-E98C9C) Rosa | `#E98C9C` | Destaques e faixa de benefícios |
+| ![](https://img.shields.io/badge/-%20%20%20-C96D7D) Rosa antigo | `#C96D7D` | Hover dos botões |
+| ![](https://img.shields.io/badge/-%20%20%20-795044) Marrom | `#795044` | Textos e rodapé |
+| ![](https://img.shields.io/badge/-%20%20%20-A83F50) Vinho | `#A83F50` | Títulos e botões principais |
 
 **Tipografia:** `Playfair Display` · `Dancing Script` · `Poppins`
 
@@ -221,10 +221,10 @@ Recarregue com `Ctrl + Shift + R` para limpar o cache do navegador e confira se 
 
 ## 👩‍💻 Autores
 
-- [Gabriela de Paula Silvestre Correa](https://www.google.com/search?q=https://github.com/EuGranola)
-- [Gabrielle Pereira do Amaral]((https://github.com/LeBlancOwO))
-- [Grazielly Seixas Gaspar] ()
-- [Matheus Consani Mercom França] ()
+- [Gabriela de Paula Silvestre Correa](https://github.com/EuGranola)
+- [Gabrielle Pereira do Amaral](https://github.com/LeBlancOwO)
+- [Grazielly Seixas Gaspar](https://github.com/Matheusconsani)
+- [Matheus Consani Mercom França](https://github.com/seixas222)
 
 ---
 
